@@ -1,4 +1,5 @@
 import { test, Browser, Page, expect } from '@playwright/test';
+import { SanboxPage } from './Pages/SandboxPage';
 
 test.describe('Acciones en el automation Sambox', () => {
     test('Clic en boton ID dinamico', async ({ page }) => {
@@ -36,12 +37,16 @@ test.describe('Acciones en el automation Sambox', () => {
         })
 
         await test.step('Puedo selecccionar el checkbox para pasta', async () => {
-            await page.getByRole('checkbox', { name: 'Pasta 🍝' }).check();
-            await expect(page.getByRole('checkbox', { name: 'Pasta 🍝' }), 'El checkbox no estaba seleccionado').toBeChecked();
+            const sandbox = new SanboxPage(page);
+           // await page.getByRole('checkbox', { name: 'Pasta 🍝' }).check();
+           await sandbox.checkPasta();
+
+            await expect(sandbox.pastaCheckbox, 'El checkbox no estaba seleccionado').toBeChecked();
         })
 
         await test.step('Puedo desseleccionar el checkbox para pasta', async () => {
             await page.getByRole('checkbox', { name: 'Pasta 🍝' }).uncheck();
+            
             await expect(page.getByRole('checkbox', { name: 'Pasta 🍝' }), 'El checkbox estaba seleccionado').not.toBeChecked();
         })
 
@@ -122,7 +127,7 @@ test.describe('Acciones en el automation Sambox', () => {
 
     })
 
-    test('Va;idacion que todos los valores cambian en la tabla dinamica luego de un reload', async ({ page }) => {
+    test('Validacion que todos los valores cambian en la tabla dinamica luego de un reload', async ({ page }) => {
         await test.step('Dado que navego al Sanbox de Automation de Free Range Testers', async () => {
             await page.goto('https://thefreerangetester.github.io/sandbox-automation-testing/')
         })
